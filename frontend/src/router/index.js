@@ -3,6 +3,7 @@ import store from '@/store'
 import Layout from '@/components/layout/Index'
 import Login from '@/views/login/Index'
 import Welcome from './modules/welcome'
+import Xterm from './modules/xterm'
 
 // const originalPush = VueRouter.prototype.push
 // VueRouter.prototype.push = function push (location) {
@@ -19,7 +20,8 @@ const routes = [
     component: Layout,
     redirect: '/welcome',
     children: [
-      ...Welcome
+      ...Welcome,
+      ...Xterm
     ],
     meta: {
       validate: true
