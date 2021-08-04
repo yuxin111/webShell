@@ -1,0 +1,32 @@
+/* table样式修改 */
+.el-table {
+  .el-table__header-wrapper, .el-table__fixed-header-wrapper {
+    th {
+      word-break: break-word;
+      background-color: #f8f8f9;
+      color: #515a6e;
+      font-size: 13px;
+      .cell{
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+/* form样式修改 */
+.el-form-item__label{
+  font-weight: 700;
+}
+//.el-form-item__content{
+//  line-height: 36px;
+//}
+
+/* dialog样式修改 */
+.el-dialog__body{
+  padding: 20px;
+}
+
+/* popover样式修改 */
+.el-popconfirm__action{
+  margin-top: 8px !important;
+}
