@@ -6,15 +6,20 @@
 
 <script>
 import { Terminal } from 'xterm'
-import { FitAddon } from 'xterm-addon-fit'
+// import { FitAddon } from 'xterm-addon-fit'
 import 'xterm/css/xterm.css'
 
 export default {
   data () {
     return {
-      ws: null,
+      ws: null, // websocket本体
+      // wsUrl: process.env.VUE_APP_WEBSHELL_WS_URL, // websocket连接地址
+      wsUrl: 'ws://127.0.0.1:8081/webshell', // websocket连接地址
       term: null
     }
+  },
+  created () {
+    this.initWs()
   },
   mounted () {
     this.initXterm()
@@ -54,7 +59,31 @@ export default {
       // fitAddon.fit()
 
       _this.term = term
+    },
+    initWs () {
+      this.ws = new WebSocket(this.wsUrl)
+      this.ws.onopen = this.wsOnOpen
+      this.ws.onerror = this.wsOnError
+      this.ws.onmessage = this.wsGetMessage
+    },
+    wsOnOpen () {
+      console.log('socket连接成功')
+    },
+    wsOnError () {
+      console.log('连接错误')
+    },
+    wsGetMessage (event) {
+      console.log(event)
+    },
+    wsOnClose () {
+      console.log('socket已经关闭')
     }
+  },
+  beforeRouteLeave (to, from, next) {
+    if (this.ws) {
+      this.ws.close()
+    }
+    next()
   }
 }
 </script>
