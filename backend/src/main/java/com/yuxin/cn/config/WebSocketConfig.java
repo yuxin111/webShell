@@ -1,6 +1,7 @@
 package com.yuxin.cn.config;
 
 import com.yuxin.cn.WebSocketHandler;
+import com.yuxin.cn.interceptor.WebSocketInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -16,7 +17,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
         webSocketHandlerRegistry
                 .addHandler(webSocketHandler,"/webshell")
-                .addHandler(new WebSocketHandler())
+                .addInterceptors(new WebSocketInterceptor())
                 .setAllowedOrigins("*");
     }
 }

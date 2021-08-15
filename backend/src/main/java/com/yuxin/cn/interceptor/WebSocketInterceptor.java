@@ -1,5 +1,6 @@
 package com.yuxin.cn.interceptor;
 
+import com.yuxin.cn.constant.Constant;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -25,7 +26,7 @@ public class WebSocketInterceptor implements HandshakeInterceptor {
             //生成一个UUID
             String uuid = UUID.randomUUID().toString().replace("-","");
             //将uuid放到websocketsession中
-//            map.put(ConstantPool.USER_UUID_KEY, uuid);
+            map.put(Constant.USER_UUID_KEY, uuid);
             return true;
         } else {
             return false;

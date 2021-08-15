@@ -74,13 +74,11 @@ export default {
     },
     wsGetMessage (event) {
       console.log(event)
-    },
-    wsOnClose () {
-      console.log('socket已经关闭')
     }
   },
   beforeRouteLeave (to, from, next) {
     if (this.ws) {
+      console.log('socket已经关闭')
       this.ws.close()
     }
     next()
