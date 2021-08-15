@@ -1,6 +1,6 @@
 <template>
   <div class="header flex-justify-end flex-align-center">
-    <HeaderAvatar class="header-avatar m-r-15"></HeaderAvatar>
+    <HeaderAvatar v-show="headerAvatarShow" class="header-avatar m-r-15"></HeaderAvatar>
   </div>
 </template>
 
@@ -9,7 +9,12 @@ import HeaderAvatar from '@/components/layout/HeaderAvatar'
 
 export default {
   name: 'Header',
-  components: { HeaderAvatar }
+  components: { HeaderAvatar },
+  data () {
+    return {
+      headerAvatarShow: JSON.parse(process.env.VUE_APP_IS_LOGIN)
+    }
+  }
 }
 </script>
 
