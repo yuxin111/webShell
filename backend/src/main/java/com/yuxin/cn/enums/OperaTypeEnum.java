@@ -5,7 +5,7 @@ package com.yuxin.cn.enums;
  * @author yuxin
  * @date 2021/8/15
  */
-public enum SSHOperaTypeEnum {
+public enum OperaTypeEnum {
     // 连接
     CONNECT,
     // 命令

@@ -1,15 +1,17 @@
 package com.yuxin.cn.entity;
 
+import com.yuxin.cn.enums.OperaTypeEnum;
 import lombok.Data;
 
 /**
- * ssh连接数据
- * @Return
+ * webshell数据传输
  * @Author YuXin
  * @Date 2021/8/15
  **/
 @Data
-public class SSHConnectData {
+public class WebSSHData {
+    // 操作
+    private OperaTypeEnum operaTypeEnum;
     private String username;
     private String host;
     private int port = 22;
