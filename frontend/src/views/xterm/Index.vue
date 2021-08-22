@@ -53,11 +53,6 @@ export default {
         _this.term.write(key)
       })
 
-      // // canvas背景全屏
-      // const fitAddon = new FitAddon()
-      // term.loadAddon(fitAddon)
-      // fitAddon.fit()
-
       _this.term = term
     },
     initWs () {
