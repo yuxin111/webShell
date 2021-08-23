@@ -4,6 +4,7 @@ import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import com.yuxin.cn.enums.OperaTypeEnum;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,14 +63,15 @@ public class SSHUtils {
     }
 
     public static void main(String[] args) {
-        try {
-            Session session = getJSchSession("yuxin","192.168.1.114",22,"1");
-            String result = execCommandByShell(session);
-            System.out.println(result);
-        } catch (JSchException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println(OperaTypeEnum.COMMAND);
+//        try {
+//            Session session = getJSchSession("yuxin","192.168.1.114",22,"1");
+//            String result = execCommandByShell(session);
+//            System.out.println(result);
+//        } catch (JSchException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 }

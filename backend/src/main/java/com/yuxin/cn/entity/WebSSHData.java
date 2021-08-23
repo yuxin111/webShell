@@ -11,9 +11,10 @@ import lombok.Data;
 @Data
 public class WebSSHData {
     // 操作
-    private OperaTypeEnum operaTypeEnum;
+    private String operate;
     private String username;
     private String host;
     private int port = 22;
     private String password;
+    private String command;
 }

@@ -33,42 +33,59 @@ export default {
         convertEol: true, // 启用时，光标将设置为下一行的开头
         disableStdin: false, // 是否应禁用输入。
         cursorStyle: 'underline', // 光标样式
-        cursorBlink: true, // 光标闪烁
-        theme: {
-          foreground: '#7e9192', // 字体
-          background: '#002833', // 背景色
-          cursor: 'help', // 设置光标
-          lineHeight: 16
-        }
+        cursorBlink: true // 光标闪烁
+        // theme: {
+        //   foreground: '#7e9192', // 字体
+        //   background: '#002833', // 背景色
+        //   cursor: 'help', // 设置光标
+        //   lineHeight: 16
+        // }
       })
 
       term.open(document.getElementById('terminal'))
 
       term.prompt = () => {
-        term.write('\r\n$ ')
+        term.write('\r\n')
       }
-      term.prompt()
+      // term.prompt()
 
       term.onData(key => {
-        _this.term.write(key)
+        this.sendClientData(key)
       })
 
       _this.term = term
     },
     initWs () {
       this.ws = new WebSocket(this.wsUrl)
-      this.ws.onopen = this.wsOnOpen
-      this.ws.onerror = this.wsOnError
-      this.ws.onmessage = this.wsGetMessage
+      this.ws.onopen = this.onOpen
+      this.ws.onerror = this.onError
+      this.ws.onmessage = this.getMessage
     },
-    wsOnOpen () {
+    onOpen () {
+      this.sendInitData({
+        operate: 'CONNECT',
+        host: '192.168.1.114', // IP
+        port: 22, // 端口号
+        username: 'yuxin', // 用户名
+        password: '1' // 密码
+      })
       console.log('socket连接成功')
     },
-    wsOnError () {
+    onError () {
       console.log('连接错误')
     },
-    wsGetMessage (event) {
-      console.log(event)
+    getMessage (event) {
+      const data = event.data.toString()
+      this.term.write(data)
+    },
+    sendInitData (options) {
+      this.ws.send(JSON.stringify(options))
+    },
+    sendClientData (data) {
+      this.ws.send(JSON.stringify({
+        operate: 'COMMAND',
+        command: data
+      }))
     }
   },
   beforeRouteLeave (to, from, next) {

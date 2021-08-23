@@ -30,6 +30,7 @@ public class ThreadPoolConfig {
         executor.setMaxPoolSize(MAX_POOL_SIZE);
         executor.setQueueCapacity(QUEUE_CAPACITY);
         executor.setKeepAliveSeconds(KEEPALIVE_SECONDS);
+        executor.setThreadNamePrefix("my-thread-");
         return executor;
     }
 }
