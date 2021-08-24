@@ -26,6 +26,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
@@ -48,8 +49,9 @@ public class WebSSHServiceImpl implements IWebSSHService {
     @Resource(name = "taskExecutor")
     private Executor taskExecutor;
 
-    @Scheduled(cron = "*/5 * * * * ?")
-    private void testTask(){
+    @Scheduled(cron = "0 */5 * * * ?")
+    private void clearConnectTask(){
+        
     }
 
     @Override
@@ -97,6 +99,9 @@ public class WebSSHServiceImpl implements IWebSSHService {
             ConnectInfo connectInfo = (ConnectInfo) sshMap.get(userId);
             if (connectInfo != null) {
                 try {
+                    //设置最后响应时间
+                    connectInfo.setLastReplyTime(LocalDateTime.now());
+
                     transToSSH(connectInfo.getChannel(), command);
                 } catch (IOException e) {
                     logger.error("webssh连接异常");
@@ -154,6 +159,9 @@ public class WebSSHServiceImpl implements IWebSSHService {
 
         //设置channel
         connectInfo.setChannel(channel);
+
+        //设置最后响应时间
+        connectInfo.setLastReplyTime(LocalDateTime.now());
 
         //转发消息
         transToSSH(channel, "\r");
