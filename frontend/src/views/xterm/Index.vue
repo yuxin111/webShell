@@ -59,6 +59,7 @@ export default {
       this.ws = new WebSocket(this.wsUrl)
       this.ws.onopen = this.onOpen
       this.ws.onerror = this.onError
+      this.ws.onclose = this.onClose
       this.ws.onmessage = this.getMessage
     },
     onOpen () {
@@ -69,10 +70,13 @@ export default {
         username: 'yuxin', // 用户名
         password: '1' // 密码
       })
-      console.log('socket连接成功')
+      this.term.write('\r\nconnect success！')
     },
     onError () {
-      console.log('连接错误')
+      this.term.write('\r\nthe connection is wrong')
+    },
+    onClose () {
+      this.term.write('\r\nthe connection is closed')
     },
     getMessage (event) {
       const data = event.data.toString()
@@ -90,7 +94,6 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     if (this.ws) {
-      console.log('socket已经关闭')
       this.ws.close()
     }
     next()

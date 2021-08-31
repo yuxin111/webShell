@@ -26,20 +26,22 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 
 /**
  * WebSSH的业务实现
+ *
  * @Author YuXin
  * @Date 2021/8/18
  **/
 @Service
 public class WebSSHServiceImpl implements IWebSSHService {
+
+    private static final int DURATION_MINUTE = 1;
 
     //存放ssh连接信息的map
     private static Map<String, Object> sshMap = new ConcurrentHashMap<>();
@@ -49,9 +51,28 @@ public class WebSSHServiceImpl implements IWebSSHService {
     @Resource(name = "taskExecutor")
     private Executor taskExecutor;
 
-    @Scheduled(cron = "0 */5 * * * ?")
-    private void clearConnectTask(){
-        
+    @Scheduled(cron = "0 */1 * * * ?")
+    private void clearConnectTask() {
+        List<Object> objects = new ArrayList<>(sshMap.values());
+        WebSocketSession session;
+        for (Object object : objects) {
+            ConnectInfo connectInfo = (ConnectInfo) object;
+            if (connectInfo.getLastReplyTime() != null) {
+                Duration duration = Duration.between(connectInfo.getLastReplyTime(), LocalDateTime.now());
+                if (duration.toMinutes() >= DURATION_MINUTE) {
+                    session = connectInfo.getWebSocketSession();
+                    logger.info("已清理线程{}", String.valueOf(session.getAttributes().get(Constant.USER_UUID_KEY)));
+                    try {
+                        close(connectInfo.getWebSocketSession());
+                        session.close();
+                    } catch (IOException e) {
+                        logger.error("session关闭异常:{}", e.getMessage());
+                    }
+
+
+                }
+            }
+        }
     }
 
     @Override
@@ -72,8 +93,7 @@ public class WebSSHServiceImpl implements IWebSSHService {
         try {
             webSSHData = objectMapper.readValue(buffer, WebSSHData.class);
         } catch (IOException e) {
-            logger.error("Json转换异常");
-            logger.error("异常信息:{}", e.getMessage());
+            logger.error("Json转换异常:{}", e.getMessage());
             return;
         }
         String userId = String.valueOf(session.getAttributes().get(Constant.USER_UUID_KEY));
@@ -88,8 +108,7 @@ public class WebSSHServiceImpl implements IWebSSHService {
                     try {
                         connectToSSH(connectInfo, finalWebSSHData, session);
                     } catch (JSchException | IOException e) {
-                        logger.error("webssh连接异常");
-                        logger.error("异常信息:{}", e.getMessage());
+                        logger.error("webssh连接异常:{}", e.getMessage());
                         close(session);
                     }
                 }
@@ -101,11 +120,9 @@ public class WebSSHServiceImpl implements IWebSSHService {
                 try {
                     //设置最后响应时间
                     connectInfo.setLastReplyTime(LocalDateTime.now());
-
                     transToSSH(connectInfo.getChannel(), command);
                 } catch (IOException e) {
-                    logger.error("webssh连接异常");
-                    logger.error("异常信息:{}", e.getMessage());
+                    logger.error("webssh连接异常:{}", e.getMessage());
                     close(session);
                 }
             }
@@ -134,6 +151,7 @@ public class WebSSHServiceImpl implements IWebSSHService {
 
     /**
      * 使用jsch连接终端
+     *
      * @param: [connectInfo, webSSHData, webSocketSession]
      * @return: void
      * @author: yuxin
@@ -190,6 +208,7 @@ public class WebSSHServiceImpl implements IWebSSHService {
 
     /**
      * 将消息转发到终端
+     *
      * @param: [channel, command]
      * @return: void
      * @author: yuxin
