@@ -41,7 +41,7 @@ import java.util.concurrent.Executor;
 @Service
 public class WebSSHServiceImpl implements IWebSSHService {
 
-    private static final int DURATION_MINUTE = 1;
+    private static final int DURATION_MINUTE = 5;
 
     //存放ssh连接信息的map
     private static Map<String, Object> sshMap = new ConcurrentHashMap<>();
@@ -49,9 +49,14 @@ public class WebSSHServiceImpl implements IWebSSHService {
     private Logger logger = LoggerFactory.getLogger(WebSSHServiceImpl.class);
 
     @Resource(name = "taskExecutor")
-    private Executor taskExecutor;
+    private ThreadPoolTaskExecutor taskExecutor;
 
-    @Scheduled(cron = "0 */1 * * * ?")
+    @Scheduled(cron = "*/5 * * * * ?")
+    public void checkTaskExecutor(){
+        System.out.println("当前活跃线程数：" + taskExecutor.getActiveCount());
+    }
+
+    @Scheduled(cron = "0 */5 * * * ?")
     private void clearConnectTask() {
         List<Object> objects = new ArrayList<>(sshMap.values());
         WebSocketSession session;
@@ -76,7 +81,7 @@ public class WebSSHServiceImpl implements IWebSSHService {
     }
 
     @Override
-    public void initConnection(WebSocketSession session) {
+    public void initConnection(WebSocketSession session){
         JSch jSch = new JSch();
         ConnectInfo connectInfo = new ConnectInfo();
         connectInfo.setJSch(jSch);
@@ -113,6 +118,7 @@ public class WebSSHServiceImpl implements IWebSSHService {
                     }
                 }
             });
+
         } else if (OperaTypeEnum.COMMAND.toString().equals(webSSHData.getOperate())) {
             String command = webSSHData.getCommand();
             ConnectInfo connectInfo = (ConnectInfo) sshMap.get(userId);

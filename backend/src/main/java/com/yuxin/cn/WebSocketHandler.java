@@ -47,7 +47,7 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         if (message instanceof TextMessage) {
-            log.info("用户:{},发送命令:{}", session.getAttributes().get(Constant.USER_UUID_KEY), session.toString());
+//            log.info("用户:{},发送命令:{}", session.getAttributes().get(Constant.USER_UUID_KEY), session.toString());
             //调用service接收消息
             webSSHService.recvHandle(((TextMessage) message).getPayload(), session);
         } else if (message instanceof BinaryMessage) {
