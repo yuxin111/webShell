@@ -13,8 +13,7 @@ export default {
   data () {
     return {
       ws: null, // websocket本体
-      // wsUrl: process.env.VUE_APP_WEBSHELL_WS_URL, // websocket连接地址
-      wsUrl: 'ws://127.0.0.1:8081/webshell', // websocket连接地址
+      wsUrl: process.env.VUE_APP_WEBSHELL_WS_URL, // websocket连接地址
       term: null
     }
   },

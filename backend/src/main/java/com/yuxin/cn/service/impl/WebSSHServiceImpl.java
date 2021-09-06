@@ -200,7 +200,6 @@ public class WebSSHServiceImpl implements IWebSSHService {
             while ((i = inputStream.read(buffer)) != -1) {
                 sendMessage(webSocketSession, Arrays.copyOfRange(buffer, 0, i));
             }
-
         } finally {
             //断开连接后关闭会话
             session.disconnect();

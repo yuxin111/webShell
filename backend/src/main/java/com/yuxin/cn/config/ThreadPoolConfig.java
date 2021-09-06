@@ -25,7 +25,7 @@ public class ThreadPoolConfig {
     private static final int KEEPALIVE_SECONDS = 1000;
 
     @Bean("taskExecutor")
-    public Executor taskExecutor(){
+    public ThreadPoolTaskExecutor taskExecutor(){
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(CORE_POOL_SIZE);
         executor.setMaxPoolSize(MAX_POOL_SIZE);
