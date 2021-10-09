@@ -51,11 +51,6 @@ public class WebSSHServiceImpl implements IWebSSHService {
     @Resource(name = "taskExecutor")
     private ThreadPoolTaskExecutor taskExecutor;
 
-    @Scheduled(cron = "*/5 * * * * ?")
-    public void checkTaskExecutor(){
-        System.out.println("当前活跃线程数：" + taskExecutor.getActiveCount());
-    }
-
     @Scheduled(cron = "0 */5 * * * ?")
     private void clearConnectTask() {
         List<Object> objects = new ArrayList<>(sshMap.values());

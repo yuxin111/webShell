@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@riophae/vue-treeselect": "^0.4.0",
+    "@tinymce/tinymce-vue": "^3.0.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "cross-env": "^7.0.3",
@@ -19,6 +20,7 @@
     "js-cookie": "^2.2.1",
     "keymaster": "^1.6.2",
     "lodash": "^4.17.20",
+    "tinymce": "^5.1.0",
     "vue": "^2.6.11",
     "vue-json-pretty": "^1.8.0",
     "xterm": "^4.13.0",
